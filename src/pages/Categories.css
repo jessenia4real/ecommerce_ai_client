@@ -1,0 +1,140 @@
+.categories-page {
+  background: #0a0a0a;
+  min-height: 100vh;
+  padding-top: 70px;
+}
+
+.categories-page__header {
+  text-align: center;
+  padding: 4rem 5% 3rem;
+}
+
+.categories-page__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.75rem;
+}
+
+.categories-page__subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+.categories-page__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding: 0 5% 5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.cat-page-card {
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cat-page-card:hover {
+  border-color: rgba(200, 168, 96, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.cat-page-card__image-wrap {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.cat-page-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.cat-page-card:hover .cat-page-card__image {
+  transform: scale(1.06);
+}
+
+.cat-page-card__image-overlay {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+}
+
+.cat-page-card__body {
+  padding: 1.5rem 1.75rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.cat-page-card__top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cat-page-card__emoji {
+  font-size: 2rem;
+}
+
+.cat-page-card__name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.2rem;
+}
+
+.cat-page-card__count {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  color: #c8a860;
+  margin: 0;
+}
+
+.cat-page-card__desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cat-page-card__cta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #c8a860;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: gap 0.2s ease;
+  margin-top: 0.25rem;
+}
+
+.cat-page-card:hover .cat-page-card__cta {
+  gap: 0.8rem;
+}
+
+@media (max-width: 1000px) {
+  .categories-page__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .categories-page__grid {
+    grid-template-columns: 1fr;
+    padding: 0 1.25rem 3rem;
+  }
+}
