@@ -41,7 +41,7 @@ export default function LoginPage() {
         localStorage.setItem('token', data.data.token);
         localStorage.setItem('user', JSON.stringify(data.data.user));
         // Use window.location for more reliable navigation
-        window.location.href = '/home';
+        window.location.href = '/';
         return;
       } else {
         setErrors({ submit: data.message || 'Login failed' });
