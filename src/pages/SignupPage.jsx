@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { FiUser, FiMail, FiLock, FiPhone, FiEye, FiEyeOff, FiArrowRight, FiCheck } from 'react-icons/fi';
 import './SignupPage.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const inputVariants = {
   hidden: { opacity: 0, x: -20 },
   visible: (i) => ({
@@ -45,11 +47,29 @@ export default function SignupPage() {
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setErrors({});
     setLoading(true);
-    await new Promise(r => setTimeout(r, 1500));
-    setLoading(false);
-    setSuccess(true);
-    await new Promise(r => setTimeout(r, 1000));
-    navigate('/login');
+    
+    try {
+      const { confirmPassword, ...registerData } = formData;
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(registerData),
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setLoading(false);
+        setSuccess(true);
+        setTimeout(() => navigate('/login'), 1500);
+      } else {
+        setLoading(false);
+        setErrors({ submit: data.message || 'Registration failed' });
+      }
+    } catch (error) {
+      setLoading(false);
+      setErrors({ submit: 'Network error. Please try again.' });
+    }
   };
 
   const handleChange = (e) => {
@@ -139,6 +159,17 @@ export default function SignupPage() {
                   </motion.div>
                 );
               })}
+
+              {errors.submit && (
+                <motion.div 
+                  className="signup-error" 
+                  style={{ textAlign: 'center', marginBottom: '10px' }}
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }}
+                >
+                  {errors.submit}
+                </motion.div>
+              )}
 
               <motion.button
                 type="submit"

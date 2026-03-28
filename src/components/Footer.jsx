@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { FiInstagram, FiTwitter, FiFacebook, FiYoutube, FiMail, FiArrowRight } from "react-icons/fi";
 import "./Footer.css";
 
@@ -6,6 +7,17 @@ const Footer = () => {
   const categories = ["Electronics", "Fashion", "Jewellery", "Accessories", "Footwear", "Beauty"];
   const company = ["About Us", "Careers", "Press", "Blog"];
   const support = ["FAQ", "Shipping Info", "Returns", "Track Order", "Contact Us"];
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (email) {
+      setSubscribed(true);
+      setEmail("");
+      setTimeout(() => setSubscribed(false), 3000);
+    }
+  };
 
   return (
     <footer className="footer">
@@ -66,17 +78,21 @@ const Footer = () => {
           <p className="footer__newsletter-text">
             Get exclusive deals and new arrivals straight to your inbox.
           </p>
-          <div className="footer__newsletter-form">
+          <form className="footer__newsletter-form" onSubmit={handleSubscribe}>
             <FiMail className="footer__newsletter-icon" />
             <input
               type="email"
               placeholder="Your email address"
               className="footer__newsletter-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
-            <button className="footer__newsletter-btn" aria-label="Subscribe">
+            <button type="submit" className="footer__newsletter-btn" aria-label="Subscribe">
               <FiArrowRight />
             </button>
-          </div>
+          </form>
+          {subscribed && <p className="footer__newsletter-success">Thanks for subscribing!</p>}
         </div>
       </div>
 

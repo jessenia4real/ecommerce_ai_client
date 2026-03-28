@@ -10,14 +10,18 @@ import CategoryPage from "./pages/CategoryPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import LandingPage from "./pages/LandingPage";
+import Cart from "./pages/Cart";
+import Account from "./pages/Account";
+import { useCart } from "./context/CartContext";
 
 function AppContent() {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
+  const { cartCount } = useCart();
 
   return (
     <>
-      {!isAuthPage && <Navbar cartCount={3} />}
+      {!isAuthPage && <Navbar cartCount={cartCount} />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
@@ -28,6 +32,8 @@ function AppContent() {
         <Route path="/deals" element={<Deals />} />
         <Route path="/about" element={<About />} />
         <Route path="/category/:slug" element={<CategoryPage />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
       {!isAuthPage && <Footer />}
     </>

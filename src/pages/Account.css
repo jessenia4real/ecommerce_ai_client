@@ -1,0 +1,214 @@
+.account-page {
+  min-height: calc(100vh - 70px);
+  background: #0a0a0a;
+  padding: 2rem;
+}
+
+.account-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+}
+
+.account-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.account-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(200, 168, 96, 0.2);
+  border-top-color: #c8a860;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Sidebar */
+.account-sidebar {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
+  height: fit-content;
+}
+
+.account-profile {
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+.account-avatar {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #c8a860, #d4b875);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 2rem;
+  color: #0a0a0a;
+}
+
+.account-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.account-email {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Navigation */
+.account-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.account-nav-item:hover,
+.account-nav-item.active {
+  background: rgba(200, 168, 96, 0.1);
+  color: #c8a860;
+}
+
+.account-logout {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.account-logout:hover {
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+/* Content */
+.account-content {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.account-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.75rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+/* Stats */
+.account-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.account-stat-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-icon {
+  font-size: 1.5rem;
+  color: #c8a860;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Info Section */
+.account-info h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.account-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.account-info-item label {
+  display: block;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.account-info-item p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .account-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .account-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .account-info-grid {
+    grid-template-columns: 1fr;
+  }
+}

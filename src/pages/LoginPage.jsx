@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from 'react-icons/fi';
 import './LoginPage.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -24,8 +26,29 @@ export default function LoginPage() {
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setErrors({});
     setLoading(true);
-    await new Promise(r => setTimeout(r, 1400));
-    navigate('/home');
+    
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        // Store token and user data
+        localStorage.setItem('token', data.data.token);
+        localStorage.setItem('user', JSON.stringify(data.data.user));
+        navigate('/home');
+      } else {
+        setErrors({ submit: data.message || 'Login failed' });
+      }
+    } catch (error) {
+      setErrors({ submit: 'Network error. Please try again.' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -141,6 +164,17 @@ export default function LoginPage() {
                 Keep me signed in
               </label>
             </motion.div>
+
+            {errors.submit && (
+              <motion.div 
+                className="login-error" 
+                style={{ textAlign: 'center', marginBottom: '10px' }}
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }}
+              >
+                {errors.submit}
+              </motion.div>
+            )}
 
             <motion.button
               type="submit"

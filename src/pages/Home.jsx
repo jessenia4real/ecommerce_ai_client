@@ -1,24 +1,10 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FiArrowRight, FiZap, FiTruck, FiShield, FiRefreshCw } from "react-icons/fi";
 import ProductCard from "../components/ProductCard";
-import products from "../data/products";
+import { productAPI, categoryAPI } from "../services/api";
 import "./Home.css";
-
-const categories = [
-  { name: "Electronics", slug: "electronics", count: "2,458 items", color: "#1a3a5c", emoji: "🖥️",
-    image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&h=400&fit=crop" },
-  { name: "Fashion", slug: "fashion", count: "5,892 items", color: "#4a1942", emoji: "👗",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop" },
-  { name: "Jewellery", slug: "jewellery", count: "1,245 items", color: "#5c3d00", emoji: "💎",
-    image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&h=400&fit=crop" },
-  { name: "Accessories", slug: "accessories", count: "3,120 items", color: "#1a3a2a", emoji: "👜",
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=400&fit=crop" },
-  { name: "Footwear", slug: "footwear", count: "2,780 items", color: "#4a1a1a", emoji: "👟",
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=400&fit=crop" },
-  { name: "Beauty", slug: "beauty", count: "4,560 items", color: "#3a1a4a", emoji: "💄",
-    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&h=400&fit=crop" },
-];
 
 const features = [
   { icon: FiTruck, title: "Free Shipping", desc: "On all orders over $75" },
@@ -27,10 +13,29 @@ const features = [
   { icon: FiZap, title: "Fast Delivery", desc: "2-3 business day delivery" },
 ];
 
-const featuredProducts = products.slice(0, 8);
-
 const Home = () => {
   const navigate = useNavigate();
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [productsRes, categoriesRes] = await Promise.all([
+          productAPI.getFeatured(),
+          categoryAPI.getAll()
+        ]);
+        setFeaturedProducts(productsRes.data.products.slice(0, 8));
+        setCategories(categoriesRes.data.categories);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="home">
@@ -131,7 +136,7 @@ const Home = () => {
         <div className="categories-grid">
           {categories.map((cat, i) => (
             <motion.div
-              key={cat.slug}
+              key={cat._id}
               className="category-card"
               onClick={() => navigate(`/category/${cat.slug}`)}
               initial={{ opacity: 0, y: 30 }}
@@ -143,9 +148,9 @@ const Home = () => {
               <img src={cat.image} alt={cat.name} className="category-card__img" />
               <div className="category-card__overlay" style={{ background: `linear-gradient(to top, ${cat.color}dd, transparent)` }} />
               <div className="category-card__body">
-                <span className="category-card__emoji">{cat.emoji}</span>
+                <span className="category-card__emoji">{cat.icon}</span>
                 <h3 className="category-card__name">{cat.name}</h3>
-                <p className="category-card__count">{cat.count}</p>
+                <p className="category-card__count">{cat.productCount} items</p>
               </div>
             </motion.div>
           ))}
@@ -168,11 +173,18 @@ const Home = () => {
             View All <FiArrowRight />
           </button>
         </div>
-        <div className="products-grid">
-          {featuredProducts.map((product, i) => (
-            <ProductCard key={product.id} product={product} index={i} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="home__loading">
+            <div className="home__loading-spinner"></div>
+            <p>Loading featured products...</p>
+          </div>
+        ) : (
+          <div className="products-grid">
+            {featuredProducts.map((product, i) => (
+              <ProductCard key={product._id} product={product} index={i} />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Banner */}

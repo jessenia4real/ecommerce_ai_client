@@ -1,9 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiSearch, FiFilter, FiX, FiChevronDown } from "react-icons/fi";
 import ProductCard from "../components/ProductCard";
-import products from "../data/products";
+import { productAPI } from "../services/api";
 import "./Shop.css";
 
 const CATEGORIES = ["all", "electronics", "fashion", "jewellery", "accessories", "footwear", "beauty"];
@@ -23,6 +23,25 @@ const Shop = () => {
   const [sortBy, setSortBy] = useState("default");
   const [search, setSearch] = useState(initialSearch);
   const [priceRange, setPriceRange] = useState([0, 2500]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await productAPI.getAll();
+        setProducts(response.data.products);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const filtered = useMemo(() => {
     let result = [...products];
@@ -51,7 +70,7 @@ const Shop = () => {
     if (sortBy === "name") result.sort((a, b) => a.name.localeCompare(b.name));
 
     return result;
-  }, [activeCategory, sortBy, search, priceRange]);
+  }, [activeCategory, sortBy, search, priceRange, products]);
 
   return (
     <div className="shop">
@@ -155,10 +174,20 @@ const Shop = () => {
             </div>
           </div>
 
-          {filtered.length > 0 ? (
+          {loading ? (
+            <div className="shop__loading">
+              <div className="shop__loading-spinner"></div>
+              <p>Loading products...</p>
+            </div>
+          ) : error ? (
+            <div className="shop__error">
+              <h3>Error loading products</h3>
+              <p>{error}</p>
+            </div>
+          ) : filtered.length > 0 ? (
             <div className="shop__grid">
               {filtered.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} />
+                <ProductCard key={product._id} product={product} index={i} />
               ))}
             </div>
           ) : (

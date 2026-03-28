@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FiShoppingCart, FiHeart, FiStar } from "react-icons/fi";
+import { useCart } from "../context/CartContext";
 import "./ProductCard.css";
 
 const ProductCard = ({ product, index = 0 }) => {
   const [wishlisted, setWishlisted] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+  const { addToCart } = useCart();
 
   const handleAddToCart = () => {
+    addToCart(product);
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 1800);
   };
