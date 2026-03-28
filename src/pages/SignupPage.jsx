@@ -61,7 +61,7 @@ export default function SignupPage() {
       if (data.success) {
         setLoading(false);
         setSuccess(true);
-        setTimeout(() => navigate('/login'), 1500);
+        setTimeout(() => { window.location.href = '/login'; }, 1500);
       } else {
         setLoading(false);
         setErrors({ submit: data.message || 'Registration failed' });

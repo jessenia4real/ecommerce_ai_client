@@ -13,7 +13,7 @@ const Account = () => {
     const userData = localStorage.getItem('user');
     
     if (!token) {
-      navigate('/login');
+      window.location.href = '/login';
       return;
     }
     
@@ -26,7 +26,7 @@ const Account = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    navigate('/login');
+    window.location.href = '/login';
   };
 
   if (loading) {
