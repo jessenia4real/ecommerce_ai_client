@@ -40,7 +40,9 @@ export default function LoginPage() {
         // Store token and user data
         localStorage.setItem('token', data.data.token);
         localStorage.setItem('user', JSON.stringify(data.data.user));
-        navigate('/home');
+        // Use window.location for more reliable navigation
+        window.location.href = '/home';
+        return;
       } else {
         setErrors({ submit: data.message || 'Login failed' });
       }
