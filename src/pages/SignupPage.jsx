@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiUser, FiMail, FiLock, FiPhone, FiEye, FiEyeOff, FiArrowRight, FiCheck } from 'react-icons/fi';
+import { authAPI } from '../services/api';
 import './SignupPage.css';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const inputVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -50,14 +49,7 @@ export default function SignupPage() {
     
     try {
       const { confirmPassword, ...registerData } = formData;
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(registerData),
-      });
-      
-      const data = await response.json();
-      
+      const data = await authAPI.register(registerData);
       if (data.success) {
         setLoading(false);
         setSuccess(true);
@@ -68,7 +60,7 @@ export default function SignupPage() {
       }
     } catch (error) {
       setLoading(false);
-      setErrors({ submit: 'Network error. Please try again.' });
+      setErrors({ submit: error.message || 'Network error. Please try again.' });
     }
   };
 

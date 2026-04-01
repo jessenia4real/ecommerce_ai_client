@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from 'react-icons/fi';
+import { authAPI } from '../services/api';
 import './LoginPage.css';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -28,26 +27,17 @@ export default function LoginPage() {
     setLoading(true);
     
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      
-      const data = await response.json();
-      
+      const data = await authAPI.login(formData.email, formData.password);
       if (data.success) {
-        // Store token and user data
         localStorage.setItem('token', data.data.token);
         localStorage.setItem('user', JSON.stringify(data.data.user));
-        // Use window.location for more reliable navigation
         window.location.href = '/';
         return;
       } else {
         setErrors({ submit: data.message || 'Login failed' });
       }
     } catch (error) {
-      setErrors({ submit: 'Network error. Please try again.' });
+      setErrors({ submit: error.message || 'Network error. Please try again.' });
     } finally {
       setLoading(false);
     }
